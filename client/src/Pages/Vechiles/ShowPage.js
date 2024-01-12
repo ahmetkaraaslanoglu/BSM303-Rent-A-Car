@@ -20,6 +20,53 @@ export function ShowPage() {
         }
     }, [vehiclesId, load]);
 
+    const updateVechileState = () => {
+        axios.put(`http://127.0.0.1:8080/vehicle/update/${vehiclesId}`, {})
+            .then((response) => {
+                if (response.data.success) {
+                    alert(response.data.message);
+                    load();
+                }
+            })
+    }
+
+    const updateVehiclePlate = (newPlate) => {
+        axios.put(`http://127.0.0.1:8080/vehicle/updatePlate`, {
+            aracId : vehicle.id,
+            aracPlaka : newPlate
+        }).then((response) => {
+            if (response.data.success) {
+                alert(response.data.message);
+                load();
+            }
+        })
+    }
+
+    const updateVehiclePrice = (newPrice) => {
+        axios.put(`http://127.0.0.1:8080/vehicle/updateCost`, {
+            aracId : vehicle.id,
+            aracFiyat : newPrice
+        }).then((response) => {
+            if (response.data.success) {
+                alert(response.data.message);
+                load();
+            }
+        })
+    }
+
+    const handleButtonClick = () => {
+        const newPlate = prompt('Yeni araç plakasını girin:');
+        if (newPlate !== null) {
+            updateVehiclePlate(newPlate);
+        }
+    }
+
+    const handleButtonClick2 = () => {
+        const newPrice = prompt('Yeni araç fiyatı girin:');
+        if (newPrice !== null) {
+            updateVehiclePrice(newPrice);
+        }
+    }
 
 
     if (!flag) {
@@ -31,6 +78,28 @@ export function ShowPage() {
     }
     return (
         <Layout>
+            <div className="h-20 px-10">
+                <div className="h-full border-b border-gray-500 flex items-center justify-between">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">Araçlar</h2>
+                    <div className="flex space-x-4 items-center">
+                        <button
+                            onClick={handleButtonClick}
+                            className="bg-gray-900 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-1 focus:outline-offset-1">
+                            Araç Plaka Güncelle
+                        </button>
+                        <button
+                            onClick={handleButtonClick2}
+                            className="bg-gray-900 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-1 focus:outline-offset-1">
+                            Araç Fiyat Güncelle
+                        </button>
+                        <button
+                            onClick={() => {updateVechileState()}}
+                            className="bg-gray-900 flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-1 focus:outline-offset-1">
+                            Araç Durumu Güncelle
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div className="w-full h-screen items-center justify-center flex p-6">
                 <div className="h-full w-2/5 mt-52">
                     <img src={vehicle.image_url} className="object-cover"/>
@@ -75,6 +144,11 @@ export function ShowPage() {
                     <div className="w-full  flex mt-20 border-b border-[#e2e4eb]">
                         <div className="w-1/5 text-lg font-semibold">Renk</div>
                         <div className="w-4/5 text-lg font-mono">{vehicle.renk}</div>
+                    </div>
+
+                    <div className="w-full  flex mt-20 border-b border-[#e2e4eb]">
+                        <div className="w-1/5 text-lg font-semibold">Durum</div>
+                        <div className="w-4/5 text-lg font-mono">{vehicle.durum ? 'Kiralanmış' : 'Müsait'}</div>
                     </div>
 
                     <div className="w-full  flex mt-20">
