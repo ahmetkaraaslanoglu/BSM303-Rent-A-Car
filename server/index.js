@@ -12,7 +12,7 @@ const db = mysql.createConnection({
     port: 3307,
     user: 'root',
     password: '',
-    database: 'bsm303',
+    database: 'rent_a_car',
 })
 
 db.connect((err) => {
@@ -118,10 +118,12 @@ app.get('/transactions', (req,res) => {
     });
 });
 app.post('/transaction/add', (req,res) => {
-    const { aracPlaka, personelKimlik, musteriKimlik, kiralamaTarih, teslimTarih, toplamFiyat, odeme_tur } = req.body;
-    const sql = "CALL addTransaction(?,?,?,?,?,?,?)";
-    db.query(sql, [aracPlaka, personelKimlik, musteriKimlik, kiralamaTarih, teslimTarih, toplamFiyat, odeme_tur], (err, data) => {
-
+    const { aracPlaka, personelKimlik, musteriKimlik, kiralamaTarih, teslimTarih, odeme_tur } = req.body;
+    const sql = "CALL addTransaction(?,?,?,?,?,?)";
+    db.query(sql, [aracPlaka, personelKimlik, musteriKimlik, kiralamaTarih, teslimTarih, odeme_tur], (err, data) => {
+        if(err) {
+            return res.json({ success: false, message: 'Teslim tarihi kiralama tarihinden önce olamaz' });
+        }
         return res.json({ success: true, message: 'Kiralama işlemi başarıyla eklendi' });
     });
 });

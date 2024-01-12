@@ -10,7 +10,7 @@ export function MaintenanceCreatePage() {
     const [bakimTutari, setBakimTutari] = useState('');
     const submit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8800/maintenance/add', {
+        axios.post('http://localhost:8080/maintenance/add', {
             plakaNumarasi: plakaNumarasi,
             bakimTarihi: bakimTarihi,
             bakimAciklamasi: bakimAciklamasi,
