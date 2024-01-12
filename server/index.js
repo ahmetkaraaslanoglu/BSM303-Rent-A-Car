@@ -49,8 +49,40 @@ app.post('/vehicle/add', (req,res) => {
     const { aracMarka, aracModel, aracYil, aracRenk, aracImageUrl, aracPlaka, aracFiyat, aracYakit, aracVites, aracKilometre, aracDurum } = req.body;
     const sql = "CALL addVehicle(?,?,?,?,?,?,?,?,?,?,?)";
     db.query(sql, [aracMarka, aracModel, aracYil, aracRenk, aracImageUrl, aracPlaka, aracFiyat, aracYakit, aracVites, aracKilometre, aracDurum], (err, data) => {
-        if (err) throw err;
+        if (err) {
+            return res.json({ success: false, message: 'Bu plakaya ait başka bir araç zaten var' });
+        }
         return res.json({ success: true, message: 'Araç başarıyla eklendi' });
+    });
+});
+app.put('/vehicle/update/:vehicleId', (req,res) => {
+    const vehicleId = req.params.vehicleId;
+    const sql = "CALL updateVehicleState(?)";
+    db.query(sql, [vehicleId], (err, data) => {
+        if (err) {
+            return res.json({ success: false, message: err });
+        }
+        return res.json({ success: true, message: 'Araç başarıyla güncellendi' });
+    });
+});
+app.put('/vehicle/updatePlate', (req,res) => {
+    const { aracId, aracPlaka } = req.body;
+    const sql = "CALL updateVehiclePlate(?,?)";
+    db.query(sql, [aracId,aracPlaka], (err, data) => {
+        if (err) {
+            return res.json({ success: false, message: err });
+        }
+        return res.json({ success: true, message: 'Araç başarıyla güncellendi' });
+    });
+});
+app.put('/vehicle/updateCost', (req,res) => {
+    const { aracId, aracFiyat } = req.body;
+    const sql = "CALL updateVehicleCost(?,?)";
+    db.query(sql, [aracId,aracFiyat], (err, data) => {
+        if (err) {
+            return res.json({ success: false, message: err });
+        }
+        return res.json({ success: true, message: 'Araç başarıyla güncellendi' });
     });
 });
 app.delete('/vehicle/delete/:vehicleId', (req,res) => {
